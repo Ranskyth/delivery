@@ -1,0 +1,88 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@config "../tailwind.config.ts";
+
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+}
+
+:root {
+  --background: 0 0% 96%;
+  --foreground: 0 0% 20%;
+  --card: 356 50% 100%;
+  --card-foreground: 356 5% 15%;
+  --popover: 356 100% 100%;
+  --popover-foreground: 356 100% 10%;
+  --primary: 356 83% 51.6%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 356 30% 90%;
+  --secondary-foreground: 0 0% 0%;
+  --muted: 318 30% 95%;
+  --muted-foreground: 225 8% 53%;
+  --accent: 318 30% 90%;
+  --accent-foreground: 356 5% 15%;
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 356 5% 100%;
+  --border: 356 30% 82%;
+  --input: 356 30% 50%;
+  --ring: 356 83% 51.6%;
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: 356 50% 10%;
+  --foreground: 356 5% 100%;
+  --card: 356 50% 10%;
+  --card-foreground: 356 5% 100%;
+  --popover: 356 50% 5%;
+  --popover-foreground: 356 5% 100%;
+  --primary: 356 83% 51.6%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 356 30% 20%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 318 30% 25%;
+  --muted-foreground: 225 8% 53%;
+  --accent: 318 30% 25%;
+  --accent-foreground: 356 5% 95%;
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 356 5% 100%;
+  --border: 356 30% 50%;
+  --input: 356 30% 50%;
+  --ring: 356 83% 51.6%;
+  --radius: 0.75rem;
+}
+
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  body {
+    @apply text-foreground antialiased;
+  }
+}
+  ::view-transition-old(root), ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+}
