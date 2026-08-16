@@ -11,7 +11,6 @@ datasource db {
   provider = "postgresql"
 }
 
-
 model Account {
   id                String  @id @default(cuid())
   userId            String  @map("user_id")
@@ -85,7 +84,7 @@ model UserFavoriteRestaurant {
   restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
   createdAt    DateTime   @default(now())
 
-   @@id([userId, restaurantId])
+  @@id([userId, restaurantId])
 }
 
 model Category {
@@ -124,6 +123,7 @@ model OrderProduct {
 model Order {
   id                  String         @id @default(uuid())
   userId              String
+  paymentMetodo String?
   user                User           @relation(fields: [userId], references: [id])
   products            OrderProduct[]
   restaurant          Restaurant     @relation(fields: [restaurantId], references: [id])
@@ -134,7 +134,23 @@ model Order {
   totalPrice          Decimal        @db.Decimal(10, 2)
   totalDiscounts      Decimal        @db.Decimal(10, 2)
   createdAt           DateTime       @default(now())
+  payment             Payment?
   status              OrderStatus
+}
+
+model Payment {
+  id             String          @id @default(nanoid())
+  qrcode         String?
+  copia_cola     String?
+  paymentProvide PaymentProvider?
+  transationId   String
+  orderId        String?          @unique
+  order          Order?           @relation(fields: [orderId], references: [id])
+}
+
+enum PaymentProvider {
+  MERCADO_PAGO
+  PAGAR_ME
 }
 
 enum OrderStatus {

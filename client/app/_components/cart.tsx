@@ -6,23 +6,26 @@ import { formatCurrency } from "../_helpers/price";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
 
-import { OrderStatus } from "@prisma/client";
+import { OrderStatus, Prisma } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "./ui/alert-dialog";
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog";
 
 import { useRouter } from "next/navigation";
 import { createOrder } from "./_actions/order";
 import { toast } from "sonner";
 import { Icons } from "./icons";
+import { randomUUID } from "node:crypto";
+import { db } from "../_lib/prisma";
+import { createPayment } from "./_actions/payment";
+
 
 interface CartProps {
   // eslint-disable-next-line no-unused-vars
@@ -33,7 +36,10 @@ const Cart = ({ setIsOpen }: CartProps) => {
   const router = useRouter();
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [isPaymentDialogOpen, setIsPaymentOpen] = useState<boolean>(false);
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<string | undefined>(undefined);
+  
 
   const { data } = useSession();
 
@@ -41,19 +47,26 @@ const Cart = ({ setIsOpen }: CartProps) => {
     useContext(CartContext);
 
   const handleFinishOrderClick = async () => {
+
     if (!data?.user) {
       setIsLoginDialogOpen(true);
       return;
     }
     const restaurant = products[0].restaurant;
-
+    
     try {
       setIsSubmitLoading(true);
+
+
+      const id = Math.random() 
+
+      console.log("passei aqui no createOrder :), id:", id)
 
       await createOrder({
         subtotalPrice,
         totalDiscounts,
         totalPrice,
+        paymentMetodo: paymentMethod!,
         deliveryFee: restaurant.deliveryFee,
         deliveryTimeMinutes: restaurant.deliveryTimeMinutes,
         restaurant: {
@@ -72,7 +85,7 @@ const Cart = ({ setIsOpen }: CartProps) => {
           },
         },
       });
-
+      
       clearCart();
       setIsOpen(false);
 
@@ -163,23 +176,39 @@ const Cart = ({ setIsOpen }: CartProps) => {
         )}
       </div>
 
-      <AlertDialog
-        open={isConfirmDialogOpen}
-        onOpenChange={setIsConfirmDialogOpen}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-center">
-              Deseja finalizar seu pedido?
-            </AlertDialogTitle>
-            <AlertDialogDescription className="text-center">
-              Ao finalizar seu pedido, você concorda com os termos e condições
-              da nossa plataforma.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
+      <Dialog open={isConfirmDialogOpen} onOpenChange={setIsConfirmDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-center">
+              Formas de Pagamento
+            </DialogTitle>
+            <DialogDescription className="text-center">
+              Escolha como deseja pagar pelo seu pedido.
+            </DialogDescription>
+          </DialogHeader>
 
-          <AlertDialogFooter className="flex gap-2 sm:justify-center md:justify-center lg:justify-center">
-            <AlertDialogCancel className="mt-0">Cancelar</AlertDialogCancel>
+          <div className="grid grid-cols-3 gap-2">
+            {([
+              { label: "Cartão", tag: "Na entrega" },
+              { label: "Dinheiro", tag: "Na entrega" },
+              { label: "PIX", tag: "Online" },
+            ]).map(({ label, tag }) => (
+              <Button
+                key={label}
+                variant={paymentMethod === label ? "default" : "outline"}
+                className="relative h-14 flex-col gap-1 text-sm"
+                onClick={() => setPaymentMethod(label)}
+              >
+                {label}
+                <span className="text-[10px] font-normal opacity-70">{tag}</span>
+              </Button>
+            ))}
+          </div>
+
+          <DialogFooter className="flex flex-col gap-2 sm:flex-row sm:justify-center">
+            <DialogClose asChild>
+              <Button variant="outline">Cancelar</Button>
+            </DialogClose>
 
             <Button
               className="gap-2 border border-input hover:bg-destructive hover:text-destructive-foreground"
@@ -189,42 +218,45 @@ const Cart = ({ setIsOpen }: CartProps) => {
               Continuar Comprando
             </Button>
 
-            <AlertDialogAction
-              onClick={handleFinishOrderClick}
-              disabled={isSubmitLoading}
+            <Button
+              onClick={() => handleFinishOrderClick()}
+              disabled={isSubmitLoading || !paymentMethod}
             >
               {isSubmitLoading && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               )}
               Finalizar
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
-      <AlertDialog open={isLoginDialogOpen} onOpenChange={setIsLoginDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-center">
-              {" "}
+      
+
+      <Dialog open={isLoginDialogOpen} onOpenChange={setIsLoginDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-center">
               Você precisa estar logado para continuar.
-            </AlertDialogTitle>
-          </AlertDialogHeader>
+            </DialogTitle>
+          </DialogHeader>
 
-          <AlertDialogFooter className="flex gap-2 sm:justify-center md:justify-center lg:justify-center">
-            <AlertDialogCancel className="mt-0 w-full md:w-24">
-              Cancelar
-            </AlertDialogCancel>
+          <DialogFooter className="flex gap-2 sm:justify-center md:justify-center lg:justify-center">
+            <DialogClose asChild>
+              <Button variant="outline" className="mt-0 w-full md:w-24">
+                Cancelar
+              </Button>
+            </DialogClose>
 
-            <AlertDialogAction
+            <Button
               className="w-full md:w-24"
               onClick={() => router.push("/login")}
             >
               Login
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

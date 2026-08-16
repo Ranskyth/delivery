@@ -44,13 +44,11 @@ const Header = () => {
     <>
       <div className="flex items-center justify-between px-5 py-3 ">
         <Link href="/">
-          <div className="relative h-[30px] rounded-4xl w-[100px]">
-            <Image
-              src="/logo.png"
+          <div className="relative flex items-center h-[20px] w-[80px]">
+            <img
+              src="/logo.svg"
               alt="Logo"
-              sizes="100%"
-              fill
-              className="object-cover"
+              className="object-cover "
             />
           </div>
         </Link>
