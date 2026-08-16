@@ -111,11 +111,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton size="lg" >
               <a className="flex gap-3 items-center" href="#">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <GalleryVerticalEnd className="size-4" />
+                  <img src="logo.png" alt="" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-medium">Documentation</span>
-                  <span className="">hello</span>
+                  <span className="font-medium">Mimo Food</span>
+                <span className="font-light">Bem Vindo! {"User"}</span>
                 </div>
               </a>
             </SidebarMenuButton>

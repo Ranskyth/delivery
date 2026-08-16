@@ -43,12 +43,12 @@ const MyOrdersPage = async () => {
           <div className="hidden md:block">
             <Button
               className=" rounded-full 
-            border border-solid border-muted-foreground bg-[#F4F4F4]  text-foreground shadow-sm"
+            border border-solid border-muted-foreground dark:bg-[#260D0E] dark:border-[#fefafa] bg-[#F4F4F4]  text-foreground shadow-sm"
               size="icon"
               asChild
             >
               <Link href="/">
-                <ChevronLeftIcon />
+                <ChevronLeftIcon className="dark:text-white" />
               </Link>
             </Button>
           </div>

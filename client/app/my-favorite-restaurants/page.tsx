@@ -32,25 +32,22 @@ const MyFavoriteRestaurants = async () => {
       <Header />
 
       <div className="px-5 py-6">
-        <div className="mb-6 inline-flex items-center justify-center">
+        <div className="mb-6 flex inline-flex items-center justify-center">
           <Button
-            className=" rounded-full
-            border border-solid border-muted-foreground  bg-[#F4F4F4] text-foreground"
+            className="border-muted-foreground text-foreground rounded-full border border-solid bg-[#F4F4F4] shadow-sm dark:border-[#fefafa] dark:bg-[#260D0E]"
             size="icon"
             asChild
           >
             <Link href="/">
-              <ChevronLeftIcon />
+              <ChevronLeftIcon className="dark:text-white" />
             </Link>
           </Button>
 
-          <h2 className=" pl-4 text-lg font-semibold ">
-            Restaurantes Favoritos
-          </h2>
+          <h2 className="pl-4 text-lg font-semibold">Restaurantes Favoritos</h2>
         </div>
 
         {serializedFavorites.length === 0 ? (
-          <div className="flex flex-col  items-center justify-center ">
+          <div className="flex flex-col items-center justify-center">
             <h3 className="mt-64 text-center font-medium">
               Você ainda não marcou nenhum restaurante como favorito.
             </h3>
@@ -61,7 +58,7 @@ const MyFavoriteRestaurants = async () => {
               <RestaurantItem
                 key={restaurant.id}
                 restaurant={restaurant}
-                className="min-w-full max-w-full"
+                className="max-w-full min-w-full"
                 userFavoriteRestaurants={serializedFavorites}
               />
             ))}

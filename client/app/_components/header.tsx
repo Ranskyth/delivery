@@ -44,10 +44,10 @@ const Header = () => {
     <>
       <div className="flex items-center justify-between px-5 py-3 ">
         <Link href="/">
-          <div className="relative h-[30px] w-[100px]">
+          <div className="relative h-[30px] rounded-4xl w-[100px]">
             <Image
               src="/logo.png"
-              alt="FSW Foods"
+              alt="Logo"
               sizes="100%"
               fill
               className="object-cover"
