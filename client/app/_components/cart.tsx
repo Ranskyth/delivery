@@ -22,9 +22,6 @@ import { useRouter } from "next/navigation";
 import { createOrder } from "./_actions/order";
 import { toast } from "sonner";
 import { Icons } from "./icons";
-import { randomUUID } from "node:crypto";
-import { db } from "../_lib/prisma";
-import { createPayment } from "./_actions/payment";
 
 
 interface CartProps {
@@ -57,12 +54,7 @@ const Cart = ({ setIsOpen }: CartProps) => {
     try {
       setIsSubmitLoading(true);
 
-
-      const id = Math.random() 
-
-      console.log("passei aqui no createOrder :), id:", id)
-
-      await createOrder({
+    /*await createOrder({
         subtotalPrice,
         totalDiscounts,
         totalPrice,
@@ -85,7 +77,7 @@ const Cart = ({ setIsOpen }: CartProps) => {
           },
         },
       });
-      
+      */
       clearCart();
       setIsOpen(false);
 

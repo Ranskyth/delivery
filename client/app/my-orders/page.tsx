@@ -34,6 +34,8 @@ const MyOrdersPage = async () => {
 
   const serializedOrders = serializePrismaObject(orders);
 
+  console.log(orders)
+
   return (
     <>
       <Header />
