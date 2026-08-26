@@ -36,7 +36,7 @@ export default function RootLayout({
       className={cn("antialiased", fontMono.variable, "font-sans", geist.variable)}
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+     
       </head>
       <body>{children}</body>
     </html>
