@@ -35,7 +35,7 @@ pnpm-debug.log*
 *.tsbuildinfo
 next-env.d.ts
 
-/lib/generated/prisma
+/app/generated/prisma
 
 .next
 .claude
